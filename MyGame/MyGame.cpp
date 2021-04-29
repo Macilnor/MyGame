@@ -2,10 +2,102 @@
 //
 
 #include <iostream>
+#include <list>
+#include <iterator>
+#include <Windows.h>
+
+using namespace std;
+
+class obj
+{
+private:
+	pair <float, float> pos;
+	pair <float, float> vel;
+	char ch;
+public:
+	obj(char charcter, pair <float,float> position, pair <float, float> velocity)
+	{
+		ch = charcter;
+		pos = position;
+		vel = velocity;
+	}
+	char getCh()
+	{
+		return ch;
+	}
+	pair <float, float> getPos()
+	{
+		return pos;
+	}
+};
+
+bool GameOver;
+const int width = 60;
+const int height = 20;
+list <obj> objects;
+
+void init()
+{
+	GameOver = false;
+	char ch = '@';
+	float x = (width / 2);
+	float y = (height / 2);
+	pair <float, float> pos(x, y);
+	pair <float, float> vel(0.0, 0.0);
+	obj player(ch,pos,vel);
+	objects.push_back(player);
+	for (int i = 0; i <= height; i++)
+	{
+		for (int j = 0; j <= width; j++)
+		{
+			if (i == 0 || i == height || j == 0 || j == width)
+			{
+				ch = '#';
+				x = j;
+				y = i;
+				pair <float, float> pos(x, y);
+				obj wall(ch, pos, vel);
+				objects.push_back(wall);
+			}
+		}
+
+	}
+}
+
+void draw()
+{
+	//system("cls");
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	for (list <obj>::iterator it = objects.begin(); it != objects.end(); it++)
+	{
+		obj Object = *it;
+		COORD coord = { Object.getPos().first, Object.getPos().second };
+		SetConsoleCursorPosition(hStdOut, coord);
+		cout << Object.getCh();
+	}
+}
+
+void input()
+{
+
+}
+
+void logic()
+{
+
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    init();
+	while (!GameOver)
+	{
+		draw();
+		input();
+		logic();
+	}
+	return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
