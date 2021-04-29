@@ -38,7 +38,8 @@ list <obj> objects;
 
 void init()
 {
-	GameOver = false;
+	GameOver = false; //Говорим программе что игра не окончена
+	//Создаем объект Игрок
 	char ch = '@';
 	float x = (width / 2);
 	float y = (height / 2);
@@ -46,6 +47,7 @@ void init()
 	pair <float, float> vel(0.0, 0.0);
 	obj player(ch,pos,vel);
 	objects.push_back(player);
+	//Создаем стены вокруг игрового поля
 	for (int i = 0; i <= height; i++)
 	{
 		for (int j = 0; j <= width; j++)
@@ -60,21 +62,19 @@ void init()
 				objects.push_back(wall);
 			}
 		}
-
 	}
 }
 
 void draw()
 {
-	//system("cls");
+
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	for (list <obj>::iterator it = objects.begin(); it != objects.end(); it++)
 	{
-		obj Object = *it;
-		COORD coord = { Object.getPos().first, Object.getPos().second };
+		COORD coord = { it->getPos().first, it->getPos().second };
 		SetConsoleCursorPosition(hStdOut, coord);
-		cout << Object.getCh();
+		cout << it->getCh();
 	}
 }
 
